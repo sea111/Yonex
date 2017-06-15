@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>正品控-添加产品</title>	
+	</head>
+	<link rel="stylesheet" href="css/add_product.css" />
+	<script type="text/javascript">
+		document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + "px";
+		window.addEventListener("resize",function(){
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + "px";
+		},false);
+	</script>
+	<body>
+		<!---->
+		<div id="box">
+			<div class="top">
+				<i class="bg-icon back" id="back" onclick="window.history.back()"></i>
+				<div>添加产品</div>
+			</div>
+			<div id="content">
+				<div class="content-cont">
+					<!--<p class="com series">弓剑系列(ARCSABER)</p>
+					<ul class="conts">
+						<li class="com cont">ARCSABER-TF3</li>
+						<li class="com cont">ARCSABER 11</li>
+						<li class="com cont">ARCSABER FB</li>
+						<li class="com cont">ARCSABER 9FL</li>
+					</ul>-->
+				</div>
+			</div>
+			<div class="loading">
+				<div class="middle"><img src="images/scan_net.png" />
+					<p>网络异常，点击
+						<a href="javascript:;" id="wpReload">重新加载</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="lib/jquery-2.1.0.min.js" ></script>
+	<script type="text/javascript" src="lib/wpCommon.js" ></script>
+	<script>
+		$.ajax({
+			url:"JSON/add_product.json",
+			type:"get",
+			timeout:10000,
+			success:function(res){
+				if(res.success){
+					addData= res.data;
+					for(var i=0;i<addData.length;i++){
+						var category=addData[i].categoryValues;
+						var str="";
+						str+='<p class="com series">'+addData[i].categoryName+'</p>'
+						str+='<ul class="conts">'
+						for(var j=0;j<category.length;j++){
+							var pro=category[j].proName;
+								console.log(pro.replace(/\s/g,''))
+								pros=pro.replace(/\s/g,'')
+							str+='<li class="com cont" productId='+category[j].proId+' productName='+pros+'>'+category[j].proName+'</li>'
+							console.log(category[j].proName)
+						}
+						str+='</ul>'
+						$(".content-cont").append(str);
+					}
+				}
+			}
+		})
+	//点击li跳转变色
+	$("#content").on("click",".cont",function(){	
+		//如果productId已经存储就进入if
+		/*if(localStorage.getItem("productId")){
+			addIdArr=JSON.parse(localStorage.getItem("productId"));
+			addIdArr.push($(this).attr("productId"));
+			addNameArr=JSON.parse(localStorage.getItem("productName"))
+			alert(addNameArr)
+			addNameArr.push($(this).attr("productName"));
+		}else{
+			addIdArr.push($(this).attr("productId"));
+			addNameArr.push($(this).attr("productName"));
+			alert(JSON.stringify(addNameArr+"1"))
+		}
+		addNameArr=unique(addNameArr);//去重的产品名
+		addIdArr=unique(addIdArr);//去重的产品id*/
+		var productId=$(this).attr("productId");
+		var productName=$(this).attr("productName");
+		localStorage.setItem("productId",JSON.stringify(productId));
+		localStorage.setItem("productName",JSON.stringify(productName));
+		//去重
+	/*	function unique(arr){
+		    var newArr = [];//新建一个数组
+		    for(var i=0,len=arr.length;i<len;i++){
+		        if(newArr.indexOf(arr[i]) == -1){//若新数组中未包含该项则将其存入新数组
+		          newArr.push(arr[i]);
+		      	}
+		    }
+		    return newArr;
+		}  */  		
+		window.location.href="aa.html"
+	})		
+	</script>
+</html>
